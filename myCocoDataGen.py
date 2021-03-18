@@ -33,7 +33,7 @@ class Coco_datagen:
 		self.coco_kps = COCO(annFile)
 
 		self.annIds = self.coco_kps.getAnnIds()
-		self.anns = self.coco_kps.loadAnns(train_annIds)
+		self.anns = self.coco_kps.loadAnns(self.annIds)
 
 		self.img_ids = [ann['image_id'] for ann in self.anns]
 		self.n_imgs = len(self.img_ids)
