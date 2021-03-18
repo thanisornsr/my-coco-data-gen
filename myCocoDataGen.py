@@ -44,7 +44,7 @@ class Coco_datagen:
 
 		self.imgs = self.coco_kps.loadImgs(self.img_ids)
 		self.kps,self.valids = self.get_target_valid_joint()
-		self.scale_kps_to_43()
+		self.scale_bbox_to_43()
 		self.convert_kps_to_local()
 		self.scale_kps_to_output_size()
 
