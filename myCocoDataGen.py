@@ -208,32 +208,32 @@ class Coco_datagen:
 		temp_imgdir = self.img_dir
 		# temp_dict = self.id_to_file_dict
 		for i in range(b_start,b_end):
-		#valid
-		i_valid = temp_valids[i]
-		i_ones = np.ones((*temp_output_shape,17),dtype = np.float32)
-		o_valid = i_ones*i_valid
+			#valid
+			i_valid = temp_valids[i]
+			i_ones = np.ones((*temp_output_shape,17),dtype = np.float32)
+			o_valid = i_ones*i_valid
 
-		#heatmap
-		i_kp = temp_kps[i]
-		o_heatmap = self.render_gaussian_heatmap(i_kp,i_valid,2)
-		#imgs
-		i_img = temp_imgs[i]
-		o_img = io.imread('./'+ temp_imgdir + '/' + i_img['file_name'])
-		i_bbox = temp_bbox[i]
-		if o_img.shape[0] == 0 or o_img.shape[1]  == 0 or o_img.ndim < 3:
-			continue
-		o_crop = o_img[int(i_bbox[1]):int(i_bbox[1]+i_bbox[3]),int(i_bbox[0]):int(i_bbox[0]+i_bbox[2]),:]
-		# detect empthy image
-		if o_crop.shape[0] == 0 or o_crop.shape[1]  == 0 or o_crop.shape[2] == 0:
-			continue
-		o_crop = resize(o_crop,temp_input_shape)
-		o_crop = o_crop.astype('float32')
+			#heatmap
+			i_kp = temp_kps[i]
+			o_heatmap = self.render_gaussian_heatmap(i_kp,i_valid,2)
+			#imgs
+			i_img = temp_imgs[i]
+			o_img = io.imread('./'+ temp_imgdir + '/' + i_img['file_name'])
+			i_bbox = temp_bbox[i]
+			if o_img.shape[0] == 0 or o_img.shape[1]  == 0 or o_img.ndim < 3:
+				continue
+			o_crop = o_img[int(i_bbox[1]):int(i_bbox[1]+i_bbox[3]),int(i_bbox[0]):int(i_bbox[0]+i_bbox[2]),:]
+			# detect empthy image
+			if o_crop.shape[0] == 0 or o_crop.shape[1]  == 0 or o_crop.shape[2] == 0:
+				continue
+			o_crop = resize(o_crop,temp_input_shape)
+			o_crop = o_crop.astype('float32')
 
-		batch_imgs.append(o_crop)
-		batch_heatmaps.append(o_heatmap)
-		batch_valids.append(o_valid)
-	batch_imgs = np.array(batch_imgs)
-	batch_heatmaps = np.array(batch_heatmaps)
-	batch_valids = np.array(batch_valids)
+			batch_imgs.append(o_crop)
+			batch_heatmaps.append(o_heatmap)
+			batch_valids.append(o_valid)
+		batch_imgs = np.array(batch_imgs)
+		batch_heatmaps = np.array(batch_heatmaps)
+		batch_valids = np.array(batch_valids)
 
-	return batch_imgs, batch_heatmaps, batch_valids
+		return batch_imgs, batch_heatmaps, batch_valids
