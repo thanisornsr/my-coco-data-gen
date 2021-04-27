@@ -64,9 +64,16 @@ class Coco_datagen:
 		temp_kps = []
 		temp_valids = []
 		for temp_anno_kp in temp_anno_kp_valid:
+			
 			temp_x = np.array(temp_anno_kp[0::3])
+			temp_x = np.delete(temp_x,[1,2])
+
 			temp_y = np.array(temp_anno_kp[1::3])
+			temp_y = np.delete(temp_y,[1,2])
+
 			temp_valid = np.array(temp_anno_kp[2::3])
+			temp_valid = np.delete(temp_valid,[1,2])
+
 			temp_valid = temp_valid > 0
 			temp_valid = temp_valid.astype('float32')
 			temp_target_coord = np.stack([temp_x,temp_y],axis=1)
@@ -74,6 +81,7 @@ class Coco_datagen:
 
 			temp_kps.append(temp_target_coord)
 			temp_valids.append(temp_valid)
+			
 
 		return temp_kps,temp_valids
 
@@ -178,14 +186,14 @@ class Coco_datagen:
 
 		input_kps_float = input_kps.astype(np.float64)
 
-		x = tf.floor(tf.reshape(input_kps_float[:,0],[-1,1,1,17])+ 0.5 )
-		y = tf.floor(tf.reshape(input_kps_float[:,1],[-1,1,1,17])+ 0.5 )
+		x = tf.floor(tf.reshape(input_kps_float[:,0],[-1,1,1,15])+ 0.5 )
+		y = tf.floor(tf.reshape(input_kps_float[:,1],[-1,1,1,15])+ 0.5 )
 		x = tf.cast(x,tf.float32)
 		y = tf.cast(y,tf.float32)
 		temp_heatmap = tf.exp(-(((xx-x)/tf.cast(sigma,tf.float32))**2)/tf.cast(2,tf.float32) - (((yy-y)/tf.cast(sigma,tf.float32))**2)/tf.cast(2,tf.float32))
 		temp_heatmap = temp_heatmap * 255.
 		temp_heatmap = temp_heatmap.numpy()
-		temp_heatmap = np.reshape(temp_heatmap,(*r_output_shape,17))
+		temp_heatmap = np.reshape(temp_heatmap,(*r_output_shape,15))
 
 		for ii in range(len(input_valids)):
 			if input_valids[ii] <= 0:
@@ -210,7 +218,7 @@ class Coco_datagen:
 		for i in range(b_start,b_end):
 			#valid
 			i_valid = temp_valids[i]
-			i_ones = np.ones((*temp_output_shape,17),dtype = np.float32)
+			i_ones = np.ones((*temp_output_shape,15),dtype = np.float32)
 			o_valid = i_ones*i_valid
 
 			#heatmap
