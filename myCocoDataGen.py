@@ -26,6 +26,7 @@ class Coco_datagen:
 		self.n_imgs = None
 		self.batch_size = batch_size_select
 		self.n_batchs = None
+		self.sig = 2
 
 		dataDir = '.'
 		dataType = anno_type
@@ -223,7 +224,7 @@ class Coco_datagen:
 
 			#heatmap
 			i_kp = temp_kps[i]
-			o_heatmap = self.render_gaussian_heatmap(i_kp,i_valid,2)
+			o_heatmap = self.render_gaussian_heatmap(i_kp,i_valid,self.sig)
 			#imgs
 			i_img = temp_imgs[i]
 			o_img = io.imread('./'+ temp_imgdir + '/' + i_img['file_name'])
